@@ -2,12 +2,12 @@ import './App.css'
 import { RoomsProvider } from './components/RoomContext'
 import { Rooms } from './components/Rooms'
 import Pagination from './components/Pagination'
-import { Sort } from './components/Sort'
+import { Filters } from './components/Filters'
 
 function App() {
     return (
         <RoomsProvider>
-            <Sort />
+            <Filters />
             <Rooms />
             <Pagination />
         </RoomsProvider>

@@ -1,13 +1,16 @@
 import {
     createContext,
-    ReactNode, useCallback,
+    ReactNode,
+    useCallback,
     useContext,
-    useEffect, useMemo,
+    useEffect,
+    useMemo,
     useState,
 } from 'react'
 import { getRoomsData } from '../services/getRoomsData'
 import { getRoomAvailability } from '../services/getRoomAvailability'
 import { RoomState } from '../models/RoomState'
+import { sortRooms } from '../utils/sortRooms'
 
 const PAGE_SIZE = 4
 
@@ -37,7 +40,7 @@ export const RoomsProvider: React.FC<{ children: ReactNode }> = ({
     }, [])
 
     useEffect(() => {
-        sortRooms(sortCriteria)
+        setRooms((rooms) => sortRooms(rooms, sortCriteria))
         setPaginatedRooms(
             rooms.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
         )
@@ -52,61 +55,54 @@ export const RoomsProvider: React.FC<{ children: ReactNode }> = ({
     const fetchRooms = async () => {
         try {
             const data = await getRoomsData()
-            setRooms(data)
+            setRooms(sortRooms(data, sortCriteria))
         } catch (error) {
             alert(`Error fetching rooms data: ${error}`)
         }
     }
 
-    const sortRooms = (criteria: 'price' | 'name') => {
-        const sorted = [...rooms]
-        if (criteria === 'price') {
-            sorted.sort(
-                (a, b) =>
-                    (a?.currentPrice?.value || a?.price?.value || Infinity) -
-                    (b?.currentPrice?.value || b?.price?.value || Infinity)
-            )
-        } else if (criteria === 'name') {
-            sorted.sort((a, b) => a.name.localeCompare(b.name))
-        }
-        setRooms(sorted)
-    }
-
-    const checkAvailability = useCallback(async (id: number | 'all') => {
-        if (id === 'all') {
-            const allIds = rooms.map((room) => room.id);
-            const roomsAvailibility = await Promise.all(allIds.map( async (id) => {
-                const roomAvailibility = await getRoomAvailability(id);
-                return {
-                    id,
-                    ...roomAvailibility
-                }
-            }));
-            setRooms((prevRooms) =>
-                prevRooms.map((room) => {
-                        const data = roomsAvailibility.find((r) => r.id === room.id);
+    const checkAvailability = useCallback(
+        async (id: number | 'all') => {
+            if (id === 'all') {
+                const allIds = rooms.map((room) => room.id)
+                const roomsAvailibility = await Promise.all(
+                    allIds.map(async (id) => {
+                        const roomAvailibility = await getRoomAvailability(id)
+                        return {
+                            id,
+                            ...roomAvailibility,
+                        }
+                    })
+                )
+                setRooms((prevRooms) =>
+                    prevRooms.map((room) => {
+                        const data = roomsAvailibility.find(
+                            (r) => r.id === room.id
+                        )
                         return {
                             ...room,
                             availabilityStatus: data?.availabilityStatus,
                             currentPrice: data?.price,
                         }
                     })
-            )
-        } else {
-            const data = await getRoomAvailability(id)
-            setRooms((prevRooms) =>
-                prevRooms.map((room) =>
-                    room.id === id
-                        ? {
-                            ...room,
-                            availabilityStatus: data.availabilityStatus,
-                            currentPrice: data.price,
-                        }
-                        : room
                 )
-            )
-        }
-    }, [rooms])
+            } else {
+                const data = await getRoomAvailability(id)
+                setRooms((prevRooms) =>
+                    prevRooms.map((room) =>
+                        room.id === id
+                            ? {
+                                  ...room,
+                                  availabilityStatus: data.availabilityStatus,
+                                  currentPrice: data.price,
+                              }
+                            : room
+                    )
+                )
+            }
+        },
+        [rooms]
+    )
 
     const book = useCallback((roomId: number) => {
         alert(`Booking room with id: ${roomId}`)
@@ -143,11 +139,14 @@ export const useRoomsContext = () => {
 export const usePaginationData = () => {
     const context = useRoomsContext()
 
-    const paginationData = useMemo(() => ({
-        currentPage: context.currentPage,
-        numberOfPages: context.numberOfPages,
-        setPage: context.setPage,
-    }), [context.currentPage, context.numberOfPages, context.setPage])
+    const paginationData = useMemo(
+        () => ({
+            currentPage: context.currentPage,
+            numberOfPages: context.numberOfPages,
+            setPage: context.setPage,
+        }),
+        [context.currentPage, context.numberOfPages, context.setPage]
+    )
 
     return paginationData
 }
