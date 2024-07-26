@@ -1,4 +1,4 @@
-import { usePaginationData } from './RoomContext'
+import { usePaginationData } from "../hooks/useRoomsContext";
 
 const Pagination = () => {
     const { currentPage, setPage, numberOfPages } = usePaginationData()

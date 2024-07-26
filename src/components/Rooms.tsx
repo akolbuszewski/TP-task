@@ -1,5 +1,5 @@
-import { useRoomsContext } from './RoomContext'
 import RoomCard from './RoomCard'
+import {useRoomsContext} from "../hooks/useRoomsContext";
 
 export const Rooms = () => {
     const data = useRoomsContext()

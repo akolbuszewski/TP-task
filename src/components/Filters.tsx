@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useRoomsContext } from './RoomContext'
+import {useRoomsContext} from "../hooks/useRoomsContext";
 
 type SortOption = 'name' | 'price'
 

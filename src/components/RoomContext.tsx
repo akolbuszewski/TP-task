@@ -2,9 +2,7 @@ import {
     createContext,
     ReactNode,
     useCallback,
-    useContext,
     useEffect,
-    useMemo,
     useState,
 } from 'react'
 import { getRoomsData } from '../services/getRoomsData'
@@ -14,7 +12,7 @@ import { sortRooms } from '../utils/sortRooms'
 
 const PAGE_SIZE = 4
 
-interface RoomsContextProps {
+export interface RoomsContextProps {
     rooms: RoomState[]
     currentPage: number
     numberOfPages: number
@@ -25,7 +23,7 @@ interface RoomsContextProps {
     book: (roomId: number) => void
 }
 
-const RoomsContext = createContext<RoomsContextProps | undefined>(undefined)
+export const RoomsContext = createContext<RoomsContextProps | undefined>(undefined)
 
 export const RoomsProvider: React.FC<{ children: ReactNode }> = ({
     children,
@@ -52,6 +50,10 @@ export const RoomsProvider: React.FC<{ children: ReactNode }> = ({
         )
     }, [rooms, currentPage])
 
+    const book = useCallback((roomId: number) => {
+        console.log(`Booking room with id: ${roomId}`);
+    }, [])
+
     const fetchRooms = async () => {
         try {
             const data = await getRoomsData()
@@ -61,8 +63,7 @@ export const RoomsProvider: React.FC<{ children: ReactNode }> = ({
         }
     }
 
-    const checkAvailability = useCallback(
-        async (id: number | 'all') => {
+    const checkAvailability = async (id: number | 'all') => {
             if (id === 'all') {
                 const allIds = rooms.map((room) => room.id)
                 const roomsAvailibility = await Promise.all(
@@ -100,13 +101,7 @@ export const RoomsProvider: React.FC<{ children: ReactNode }> = ({
                     )
                 )
             }
-        },
-        [rooms]
-    )
-
-    const book = useCallback((roomId: number) => {
-        console.log(`Booking room with id: ${roomId}`);
-    }, [])
+        }
 
     const numberOfPages = Math.ceil(rooms.length / PAGE_SIZE)
 
@@ -128,25 +123,3 @@ export const RoomsProvider: React.FC<{ children: ReactNode }> = ({
     )
 }
 
-export const useRoomsContext = () => {
-    const context = useContext(RoomsContext)
-    if (!context) {
-        throw new Error('useRoomsContext must be used within a RoomsProvider')
-    }
-    return context
-}
-
-export const usePaginationData = () => {
-    const context = useRoomsContext()
-
-    const paginationData = useMemo(
-        () => ({
-            currentPage: context.currentPage,
-            numberOfPages: context.numberOfPages,
-            setPage: context.setPage,
-        }),
-        [context.currentPage, context.numberOfPages, context.setPage]
-    )
-
-    return paginationData
-}

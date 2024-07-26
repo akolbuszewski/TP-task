@@ -3,12 +3,12 @@ import { fireEvent, render, screen } from '@testing-library/react'
 // todo: setup custom matchers globally
 import '@testing-library/jest-dom'
 
-jest.mock('./RoomContext', () => ({
+jest.mock('./../hooks/useRoomsContext', () => ({
     usePaginationData: jest.fn(),
 }))
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const usePaginationData = require('./RoomContext').usePaginationData
+const usePaginationData = require('./../hooks/useRoomsContext').usePaginationData
 
 describe('Pagination Component', () => {
     beforeEach(() => {
