@@ -1,5 +1,6 @@
 {
     "name": "tp-task",
+    "description": "recruitment task",
     "private": true,
     "version": "0.0.0",
     "type": "module",

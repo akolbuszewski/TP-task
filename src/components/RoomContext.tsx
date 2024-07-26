@@ -57,7 +57,7 @@ export const RoomsProvider: React.FC<{ children: ReactNode }> = ({
             const data = await getRoomsData()
             setRooms(sortRooms(data, sortCriteria))
         } catch (error) {
-            alert(`Error fetching rooms data: ${error}`)
+            console.error(`Error fetching rooms data: ${error}`)
         }
     }
 
@@ -105,7 +105,7 @@ export const RoomsProvider: React.FC<{ children: ReactNode }> = ({
     )
 
     const book = useCallback((roomId: number) => {
-        alert(`Booking room with id: ${roomId}`)
+        console.log(`Booking room with id: ${roomId}`);
     }, [])
 
     const numberOfPages = Math.ceil(rooms.length / PAGE_SIZE)
