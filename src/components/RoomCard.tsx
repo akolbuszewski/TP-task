@@ -22,7 +22,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
     onBook,
 }) => {
     return (
-        <div className="border rounded-lg p-4 shadow-md">
+        <div className="border rounded-lg p-4 shadow-md w-64 flex-shrink-0">
             <h2 className="text-xl font-bold mb-2">{name}</h2>
             <p className="text-gray-700">
                 Original Price: {originalPrice} {currency}
@@ -37,7 +37,7 @@ const RoomCard: React.FC<RoomCardProps> = ({
                     Availability: {availabilityStatus}
                 </p>
             )}
-            <div className="flex space-x-2 mt-4">
+            <div className="flex space-x-2 mt-4 justify-center">
                 <button
                     onClick={() => onCheckAvailability(id)}
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"

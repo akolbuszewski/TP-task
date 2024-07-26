@@ -4,7 +4,9 @@ import RoomCard from './RoomCard'
 export const Rooms = () => {
     const data = useRoomsContext()
 
-    return data.paginatedRooms.map((room) => (
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {data.paginatedRooms.map((room) => (
         <RoomCard
             key={room.id}
             id={room.id}
@@ -16,5 +18,6 @@ export const Rooms = () => {
             onCheckAvailability={data.checkAvailability}
             onBook={data.book}
         />
-    ))
+    ))}
+    </div>)
 }

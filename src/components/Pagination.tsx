@@ -1,7 +1,7 @@
-import { useRoomsContext } from './RoomContext'
+import {usePaginationData} from './RoomContext'
 
 const Pagination = () => {
-    const { currentPage, setPage, numberOfPages } = useRoomsContext()
+    const { currentPage, setPage, numberOfPages } = usePaginationData()
 
     const pages = [...Array(numberOfPages).keys()].map((num) => num + 1)
 

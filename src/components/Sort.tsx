@@ -5,7 +5,7 @@ type SortOption = 'name' | 'price'
 
 export const Sort: React.FC = () => {
     const [selectedOption, setSelectedOption] = useState<SortOption>('price')
-    const { sortRooms } = useRoomsContext()
+    const { sortRooms, checkAvailability } = useRoomsContext()
 
     const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedOption(e.target.value as SortOption)
@@ -37,6 +37,12 @@ export const Sort: React.FC = () => {
                 />
                 Price
             </label>
+            <button
+                onClick={() => checkAvailability('all')}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+                Check All
+            </button>
         </div>
     )
 }
