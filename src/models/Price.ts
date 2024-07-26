@@ -1,5 +1,4 @@
 export interface Price {
-    currencyCode: string;
-    value: number;
-
+    currencyCode: string
+    value: number
 }

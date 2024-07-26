@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import {useRoomsContext} from "./RoomContext";
+import React, { useState } from 'react'
+import { useRoomsContext } from './RoomContext'
 
-type SortOption = 'name' | 'price';
+type SortOption = 'name' | 'price'
 
 export const Sort: React.FC = () => {
-    const [selectedOption, setSelectedOption] = useState<SortOption>('price');
-    const { sortRooms }= useRoomsContext();
+    const [selectedOption, setSelectedOption] = useState<SortOption>('price')
+    const { sortRooms } = useRoomsContext()
 
     const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedOption(e.target.value as SortOption);
-        sortRooms(e.target.value as SortOption);
-    };
+        setSelectedOption(e.target.value as SortOption)
+        sortRooms(e.target.value as SortOption)
+    }
 
     return (
         <div className="p-4">
@@ -38,6 +38,5 @@ export const Sort: React.FC = () => {
                 Price
             </label>
         </div>
-    );
-};
-
+    )
+}

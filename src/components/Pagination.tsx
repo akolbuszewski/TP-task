@@ -1,9 +1,9 @@
-import {useRoomsContext} from "./RoomContext";
+import { useRoomsContext } from './RoomContext'
 
 const Pagination = () => {
-    const { currentPage, setPage, numberOfPages }= useRoomsContext();
+    const { currentPage, setPage, numberOfPages } = useRoomsContext()
 
-    const pages = [...Array(numberOfPages).keys()].map(num => num + 1);
+    const pages = [...Array(numberOfPages).keys()].map((num) => num + 1)
 
     return (
         <div className="flex justify-center items-center space-x-2 mt-4">
@@ -15,7 +15,7 @@ const Pagination = () => {
                 Previous
             </button>
 
-            {pages.map(page => (
+            {pages.map((page) => (
                 <button
                     key={page}
                     onClick={() => setPage(page)}
@@ -33,7 +33,7 @@ const Pagination = () => {
                 Next
             </button>
         </div>
-    );
-};
+    )
+}
 
-export default Pagination;
+export default Pagination
